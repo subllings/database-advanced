@@ -1,7 +1,10 @@
 """
 Interactive search interface for the movie search engine.
 
-This module provides a command-line interface for testing and
+This module prov            print(f"   Year: {movie.get('release_year', 'N/A')}")
+            print(f"   Rating: {movie.get('rating', 'N/A')}/10")
+            print(f"   Genres: {', '.join(movie.get('genres', []))}")
+            print(f"   Director: {movie.get('director', 'Unknown')}") a command-line interface for testing and
 demonstrating the movie search engine capabilities.
 """
 
@@ -38,7 +41,9 @@ class MovieSearchInterface:
         print("7. Top Rated Movies")
         print("8. Movies by Year")
         print("9. Get Movie Details")
-        print("10. Exit")
+        print("10. Vector Plot Similarity Search")
+        print("11. Vector Description Search")
+        print("12. Exit")
         print("="*60)
     
     def get_user_input(self, prompt: str) -> str:
@@ -80,9 +85,9 @@ class MovieSearchInterface:
         
         for i, movie in enumerate(movies, 1):
             print(f"\n{i}. {movie.get('title', 'Unknown Title')}")
-            print(f"   📅 Year: {movie.get('release_year', 'N/A')}")
-            print(f"   ⭐ Rating: {movie.get('rating', 'N/A')}/10")
-            print(f"   🎭 Genres: {', '.join(movie.get('genres', []))}")
+            print(f"   Year: {movie.get('release_year', 'N/A')}")
+            print(f"   Rating: {movie.get('rating', 'N/A')}/10")
+            print(f"   Genres: {', '.join(movie.get('genres', []))}")
             print(f"   Director: {movie.get('director', 'Unknown')}")
             
             # Show description (truncated)
@@ -113,12 +118,12 @@ class MovieSearchInterface:
         print("\nMOVIE DATABASE STATISTICS")
         print("-" * 60)
         print(f"Total Movies: {stats.get('total_movies', 0)}")
-        print(f"⭐ Average Rating: {stats.get('avg_rating', 0)}")
+        print(f"Average Rating: {stats.get('avg_rating', 0)}")
         
         # Top genres
         genres = stats.get('genres', [])[:5]
         if genres:
-            print(f"\n🎭 Top Genres:")
+            print("\nTop Genres:")
             for genre in genres:
                 print(f"   - {genre['genre']}: {genre['count']} movies")
         
@@ -212,7 +217,7 @@ class MovieSearchInterface:
         query = self.get_user_input("Enter partial movie title")
         
         if not query:
-            print("❌ Please enter a partial title.")
+            print(" Please enter a partial title.")
             return
         
         print(f"\n💡 Autocomplete suggestions for '{query}':")
@@ -230,7 +235,7 @@ class MovieSearchInterface:
         genre = self.get_user_input("Enter genre to browse")
         
         if not genre:
-            print("❌ Please enter a genre.")
+            print(" Please enter a genre.")
             return
         
         print(f"\n🎭 Browsing {genre} movies...")
@@ -253,7 +258,7 @@ class MovieSearchInterface:
         year_str = self.get_user_input("Enter year (e.g., 2019)")
         
         if not year_str.isdigit():
-            print("❌ Please enter a valid year.")
+            print(" Please enter a valid year.")
             return
         
         year = int(year_str)
@@ -272,44 +277,117 @@ class MovieSearchInterface:
         movie_id = self.get_user_input("Enter movie ID (1-15)")
         
         if not movie_id.isdigit():
-            print("❌ Please enter a valid movie ID.")
+            print(" Please enter a valid movie ID.")
             return
         
         print(f"\n🎬 Getting details for movie ID {movie_id}...")
         movie = self.search_engine.get_movie_by_id(movie_id)
         
         if "error" in movie:
-            print(f"❌ {movie['error']}")
+            print(f" {movie['error']}")
             return
         
         print(f"\n📽️ MOVIE DETAILS")
         print("-" * 60)
         print(f"🎬 Title: {movie.get('title', 'Unknown')}")
         print(f"📅 Year: {movie.get('release_year', 'N/A')}")
-        print(f"⭐ Rating: {movie.get('rating', 'N/A')}/10")
+        print(f" Rating: {movie.get('rating', 'N/A')}/10")
         print(f"🎭 Genres: {', '.join(movie.get('genres', []))}")
         print(f"🎬 Director: {movie.get('director', 'Unknown')}")
         print(f"🎭 Actors: {', '.join(movie.get('actors', []))}")
         print(f"⏱️ Duration: {movie.get('duration_minutes', 'N/A')} minutes")
         print(f"💰 Box Office: ${movie.get('box_office', 0):,}")
-        print(f"\n📝 Description:")
+        print(f"\nDescription:")
         print(f"   {movie.get('description', 'No description available')}")
+    
+    def vector_plot_similarity_search(self) -> None:
+        """Search for movies with similar plots using vector embeddings."""
+        movie_id = self.get_user_input("Enter movie ID to find similar movies: ").strip()
+        
+        if not movie_id:
+            print("Please enter a movie ID.")
+            return
+        
+        print(f"\nSearching for movies with similar plots to movie ID {movie_id}...")
+        
+        results = self.search_engine.vector_similarity_search(movie_id, top_k=5)
+        
+        if "error" in results:
+            print(f"\nError: {results['error']}")
+            return
+        
+        # Show reference movie if possible
+        if results.get("reference_movie_id"):
+            print(f"\nReference Movie ID: {results['reference_movie_id']}")
+        
+        print(f"\nVector Similarity Search Results")
+        print("-" * 60)
+        print(f"Found {results['total']} similar movies")
+        print("-" * 60)
+        
+        for movie in results["results"]:
+            movie_data = movie["_source"]
+            similarity = movie.get("similarity_score", 0)
+            
+            print(f"\n{movie_data.get('title', 'Unknown Title')}")
+            print(f"   Year: {movie_data.get('release_year', 'N/A')}")
+            print(f"   Rating: {movie_data.get('rating', 'N/A')}/10")
+            print(f"   Genres: {', '.join(movie_data.get('genres', []))}")
+            print(f"   Similarity Score: {similarity}")
+            print(f"   Plot: {movie_data.get('description', 'No description')[:100]}...")
+    
+    def vector_description_search(self) -> None:
+        """Search for movies by describing a plot using vector embeddings."""
+        description = self.get_user_input("Describe the type of movie plot you're looking for: ").strip()
+        
+        if not description:
+            print("Please enter a description.")
+            return
+        
+        print(f"\nSearching for movies with similar plots to: '{description}'...")
+        
+        results = self.search_engine.vector_description_search(description, top_k=5)
+        
+        if "error" in results:
+            print(f"\nError: {results['error']}")
+            return
+        
+        print(f"\nVector Description Search Results")
+        print("-" * 60)
+        print(f"Query: {description}")
+        print(f"Found {results['total']} matching movies")
+        print("-" * 60)
+        
+        if results["total"] == 0:
+            print("No movies found matching your description.")
+            return
+        
+        for movie in results["results"]:
+            movie_data = movie["_source"]
+            similarity = movie.get("similarity_score", 0)
+            
+            print(f"\n{movie_data.get('title', 'Unknown Title')}")
+            print(f"   Year: {movie_data.get('release_year', 'N/A')}")
+            print(f"   Rating: {movie_data.get('rating', 'N/A')}/10")
+            print(f"   Genres: {', '.join(movie_data.get('genres', []))}")
+            print(f"   Similarity Score: {similarity}")
+            print(f"   Plot: {movie_data.get('description', 'No description')[:150]}...")
     
     def show_statistics(self) -> None:
         """Show database statistics."""
-        print("\n📊 Loading database statistics...")
+        print("\nLoading database statistics...")
         stats = self.search_engine.get_movie_statistics()
         self.display_statistics(stats)
     
     def run(self) -> None:
         """Run the interactive search interface."""
-        print("🎬 Welcome to the Movie Search Engine!")
+        print("Welcome to the Movie Search Engine!")
         print("This interface allows you to test all search capabilities.")
         
         while self.running:
             try:
                 self.display_menu()
-                choice = self.get_user_input("Choose an option (1-10)")
+                choice = self.get_user_input("Choose an option (1-12)")
                 
                 if choice == "1":
                     self.basic_search()
@@ -330,19 +408,23 @@ class MovieSearchInterface:
                 elif choice == "9":
                     self.get_movie_details()
                 elif choice == "10":
-                    print("\n👋 Thank you for using the Movie Search Engine!")
+                    self.vector_plot_similarity_search()
+                elif choice == "11":
+                    self.vector_description_search()
+                elif choice == "12":
+                    print("\nThank you for using the Movie Search Engine!")
                     self.running = False
                 else:
-                    print("\n❌ Invalid choice. Please enter a number between 1-10.")
+                    print("\nInvalid choice. Please enter a number between 1-12.")
                 
                 if self.running:
                     input("\nPress Enter to continue...")
                     
             except KeyboardInterrupt:
-                print("\n\n👋 Goodbye!")
+                print("\n\nGoodbye!")
                 self.running = False
             except Exception as e:
-                print(f"\n❌ An error occurred: {e}")
+                print(f"\nAn error occurred: {e}")
                 input("Press Enter to continue...")
 
 
@@ -354,7 +436,7 @@ def main():
         interface = MovieSearchInterface()
         interface.run()
     except Exception as e:
-        print(f"❌ Failed to start search interface: {e}")
+        print(f"Failed to start search interface: {e}")
         print("Make sure Elasticsearch is running and the movie data is indexed.")
 
 

@@ -7,6 +7,7 @@ including full-text search, filtering, sorting, and aggregations.
 
 from typing import Dict, List, Any, Optional, Union
 from .elasticsearch_client import ElasticsearchClient
+from .vector_search import MovieVectorSearch
 
 
 class MovieSearchEngine:
@@ -26,6 +27,8 @@ class MovieSearchEngine:
         self.es_client = ElasticsearchClient()
         self.client = self.es_client.get_client()
         self.index_name = self.es_client.get_index_name()
+        self.vector_search = MovieVectorSearch()
+        self._vector_search_fitted = False
     
     def search_movies(
         self,
@@ -514,6 +517,136 @@ class MovieSearchEngine:
         except Exception as e:
             return {
                 "error": f"Advanced search failed: {str(e)}",
+                "results": [],
+                "total": 0
+            }
+    
+    def _ensure_vector_search_fitted(self) -> None:
+        """
+        Ensure vector search is fitted with current movie data.
+        """
+        if not self._vector_search_fitted:
+            try:
+                # Get all movies from Elasticsearch
+                search_body = {
+                    "query": {"match_all": {}},
+                    "size": 1000,  # Assume we don't have more than 1000 movies
+                    "_source": ["id", "title", "description", "genres", "release_year", "rating", "director", "actors"]
+                }
+                
+                response = self.client.search(
+                    index=self.index_name,
+                    body=search_body
+                )
+                
+                movies = []
+                for hit in response["hits"]["hits"]:
+                    movie_data = hit["_source"]
+                    movie_data["id"] = hit["_id"]
+                    movies.append(movie_data)
+                
+                # Fit vector search
+                self.vector_search.fit(movies)
+                self._vector_search_fitted = True
+                
+            except Exception as e:
+                print(f"Warning: Could not fit vector search: {e}")
+    
+    def vector_similarity_search(self, movie_id: str, top_k: int = 5) -> Dict[str, Any]:
+        """
+        Find movies similar to a given movie using vector embeddings.
+        
+        Args:
+            movie_id: ID of the reference movie
+            top_k: Number of similar movies to return
+            
+        Returns:
+            Dictionary containing similar movies and metadata
+        """
+        try:
+            self._ensure_vector_search_fitted()
+            
+            # Find similar movies using vector search
+            similar_movies = self.vector_search.find_similar_movies(movie_id, top_k)
+            
+            if not similar_movies:
+                return {
+                    "error": "Movie not found or no similar movies available",
+                    "results": [],
+                    "total": 0
+                }
+            
+            # Format results
+            results = []
+            for movie, similarity_score in similar_movies:
+                result = {
+                    "_id": movie.get("id"),
+                    "_source": movie,
+                    "_score": similarity_score,
+                    "similarity_score": round(similarity_score, 3)
+                }
+                results.append(result)
+            
+            return {
+                "results": results,
+                "total": len(results),
+                "search_type": "vector_similarity",
+                "reference_movie_id": movie_id
+            }
+            
+        except Exception as e:
+            return {
+                "error": f"Vector similarity search failed: {str(e)}",
+                "results": [],
+                "total": 0
+            }
+    
+    def vector_description_search(self, description: str, top_k: int = 5) -> Dict[str, Any]:
+        """
+        Search for movies similar to a text description using vector embeddings.
+        
+        Args:
+            description: Text description to search for
+            top_k: Number of similar movies to return
+            
+        Returns:
+            Dictionary containing search results and metadata
+        """
+        try:
+            self._ensure_vector_search_fitted()
+            
+            # Search by description using vector search
+            similar_movies = self.vector_search.search_by_description(description, top_k)
+            
+            if not similar_movies:
+                return {
+                    "results": [],
+                    "total": 0,
+                    "search_type": "vector_description",
+                    "query": description
+                }
+            
+            # Format results
+            results = []
+            for movie, similarity_score in similar_movies:
+                result = {
+                    "_id": movie.get("id"),
+                    "_source": movie,
+                    "_score": similarity_score,
+                    "similarity_score": round(similarity_score, 3)
+                }
+                results.append(result)
+            
+            return {
+                "results": results,
+                "total": len(results),
+                "search_type": "vector_description",
+                "query": description
+            }
+            
+        except Exception as e:
+            return {
+                "error": f"Vector description search failed: {str(e)}",
                 "results": [],
                 "total": 0
             }
