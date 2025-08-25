@@ -6,8 +6,8 @@ demonstrating the movie search engine capabilities.
 """
 
 import json
-from typing import Dict, Any, List
-from movie_search_engine import MovieSearchEngine
+from typing import Dict, Any
+from .movie_search_engine import MovieSearchEngine
 
 
 class MovieSearchInterface:
@@ -27,18 +27,18 @@ class MovieSearchInterface:
     def display_menu(self) -> None:
         """Display the main menu options."""
         print("\n" + "="*60)
-        print("🎬 MOVIE SEARCH ENGINE")
+        print("MOVIE SEARCH ENGINE")
         print("="*60)
-        print("1. 🔍 Basic Search")
-        print("2. 🎯 Advanced Search with Filters")
-        print("3. 🔄 Find Similar Movies")
-        print("4. 💡 Autocomplete Test")
-        print("5. 📊 Movie Statistics")
-        print("6. 🎭 Browse by Genre")
-        print("7. 🏆 Top Rated Movies")
-        print("8. 📅 Movies by Year")
-        print("9. 🎬 Get Movie Details")
-        print("10. ❌ Exit")
+        print("1. Basic Search")
+        print("2. Advanced Search with Filters")
+        print("3. Find Similar Movies")
+        print("4. Autocomplete Test")
+        print("5. Movie Statistics")
+        print("6. Browse by Genre")
+        print("7. Top Rated Movies")
+        print("8. Movies by Year")
+        print("9. Get Movie Details")
+        print("10. Exit")
         print("="*60)
     
     def get_user_input(self, prompt: str) -> str:
@@ -62,14 +62,14 @@ class MovieSearchInterface:
             title: Title for the results section
         """
         if "error" in results:
-            print(f"\n❌ Error: {results['error']}")
+            print(f"\nError: {results['error']}")
             return
         
         movies = results.get("results", [])
         total = results.get("total", 0)
         took = results.get("took", 0)
         
-        print(f"\n📽️ {title}")
+        print(f"\n{title}")
         print("-" * 60)
         print(f"Found {total} movies (took {took}ms)")
         print("-" * 60)
@@ -83,7 +83,7 @@ class MovieSearchInterface:
             print(f"   📅 Year: {movie.get('release_year', 'N/A')}")
             print(f"   ⭐ Rating: {movie.get('rating', 'N/A')}/10")
             print(f"   🎭 Genres: {', '.join(movie.get('genres', []))}")
-            print(f"   🎬 Director: {movie.get('director', 'Unknown')}")
+            print(f"   Director: {movie.get('director', 'Unknown')}")
             
             # Show description (truncated)
             description = movie.get('description', 'No description available')
@@ -95,9 +95,9 @@ class MovieSearchInterface:
             if 'highlights' in movie:
                 highlights = movie['highlights']
                 if 'title' in highlights:
-                    print(f"   🔍 Title match: {' '.join(highlights['title'])}")
+                    print(f"   Title match: {' '.join(highlights['title'])}")
                 if 'description' in highlights:
-                    print(f"   🔍 Description match: {' '.join(highlights['description'])}")
+                    print(f"   Description match: {' '.join(highlights['description'])}")
     
     def display_statistics(self, stats: Dict[str, Any]) -> None:
         """
@@ -107,12 +107,12 @@ class MovieSearchInterface:
             stats: Statistics dictionary from the search engine
         """
         if "error" in stats:
-            print(f"\n❌ Error: {stats['error']}")
+            print(f"\nError: {stats['error']}")
             return
         
-        print(f"\n📊 MOVIE DATABASE STATISTICS")
+        print("\nMOVIE DATABASE STATISTICS")
         print("-" * 60)
-        print(f"📽️ Total Movies: {stats.get('total_movies', 0)}")
+        print(f"Total Movies: {stats.get('total_movies', 0)}")
         print(f"⭐ Average Rating: {stats.get('avg_rating', 0)}")
         
         # Top genres
@@ -125,7 +125,7 @@ class MovieSearchInterface:
         # Top directors
         directors = stats.get('top_directors', [])[:5]
         if directors:
-            print(f"\n🎬 Top Directors:")
+            print("\nTop Directors:")
             for director in directors:
                 print(f"   - {director['director']}: {director['movies']} movies")
         
@@ -142,16 +142,16 @@ class MovieSearchInterface:
         query = self.get_user_input("Enter search query (title, description, actors)")
         
         if not query:
-            print("❌ Please enter a search query.")
+            print("Please enter a search query.")
             return
         
-        print(f"\n🔍 Searching for: '{query}'...")
+        print(f"\nSearching for: '{query}'...")
         results = self.search_engine.search_movies(query=query, size=5)
         self.display_movies(results, f"Search Results for '{query}'")
     
     def advanced_search(self) -> None:
         """Handle advanced search with filters."""
-        print("\n🎯 Advanced Search - Enter filters (press Enter to skip):")
+        print("\nAdvanced Search - Enter filters (press Enter to skip):")
         
         query = self.get_user_input("Search query") or None
         genre = self.get_user_input("Genre (Action, Drama, Comedy, etc.)") or None
@@ -172,7 +172,7 @@ class MovieSearchInterface:
         sort_by = self.get_user_input("Sort by") or "relevance"
         sort_order = self.get_user_input("Sort order (asc/desc)") or "desc"
         
-        print("\n🔍 Searching with filters...")
+        print("\nSearching with filters...")
         results = self.search_engine.search_movies(
             query=query,
             genre=genre,
@@ -191,10 +191,10 @@ class MovieSearchInterface:
         movie_id = self.get_user_input("Enter movie ID (1-15)")
         
         if not movie_id.isdigit():
-            print("❌ Please enter a valid movie ID.")
+            print("Please enter a valid movie ID.")
             return
         
-        print(f"\n🔄 Finding movies similar to movie ID {movie_id}...")
+        print(f"\nFinding movies similar to movie ID {movie_id}...")
         
         # First show the reference movie
         reference_movie = self.search_engine.get_movie_by_id(movie_id)

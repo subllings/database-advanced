@@ -11,7 +11,7 @@ import os
 from typing import List, Dict, Any
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
-from elasticsearch_client import ElasticsearchClient
+from .elasticsearch_client import ElasticsearchClient
 
 
 class MovieDataIndexer:

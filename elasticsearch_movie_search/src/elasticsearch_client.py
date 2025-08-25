@@ -47,7 +47,7 @@ class ElasticsearchClient:
         try:
             # Basic configuration for local development
             client = Elasticsearch(
-                [{'host': self.host, 'port': self.port}],
+                hosts=[f"http://{self.host}:{self.port}"],
                 # Disable SSL verification for local development
                 verify_certs=False,
                 # Optional authentication
@@ -59,13 +59,13 @@ class ElasticsearchClient:
             
             # Test connection
             if client.ping():
-                print(f"✅ Connected to Elasticsearch at {self.host}:{self.port}")
+                print(f"Connected to Elasticsearch at {self.host}:{self.port}")
                 return client
             else:
                 raise ConnectionError("Failed to ping Elasticsearch")
                 
         except Exception as e:
-            print(f"❌ Failed to connect to Elasticsearch: {e}")
+            print(f"Failed to connect to Elasticsearch: {e}")
             print(f"Make sure Elasticsearch is running on {self.host}:{self.port}")
             raise
     

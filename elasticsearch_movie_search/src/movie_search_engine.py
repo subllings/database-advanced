@@ -6,7 +6,7 @@ including full-text search, filtering, sorting, and aggregations.
 """
 
 from typing import Dict, List, Any, Optional, Union
-from elasticsearch_client import ElasticsearchClient
+from .elasticsearch_client import ElasticsearchClient
 
 
 class MovieSearchEngine:

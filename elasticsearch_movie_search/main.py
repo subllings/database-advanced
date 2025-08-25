@@ -26,15 +26,15 @@ def check_elasticsearch_connection() -> bool:
         health = client.health_check()
         
         if 'error' in health:
-            print(f"❌ Elasticsearch health check failed: {health['error']}")
+            print(f"Elasticsearch health check failed: {health['error']}")
             return False
         
-        print(f"✅ Elasticsearch is healthy: {health['status']} cluster")
+        print(f"Elasticsearch is healthy: {health['status']} cluster")
         return True
         
     except Exception as e:
-        print(f"❌ Cannot connect to Elasticsearch: {e}")
-        print("\n💡 Make sure Elasticsearch is running:")
+        print(f"Cannot connect to Elasticsearch: {e}")
+        print("\nMake sure Elasticsearch is running:")
         print("   1. Download from: https://www.elastic.co/downloads/elasticsearch")
         print("   2. Start with: bin/elasticsearch (Linux/Mac) or bin\\elasticsearch.bat (Windows)")
         print("   3. Verify it's running: curl http://localhost:9200")
@@ -49,7 +49,7 @@ def setup_movie_database() -> bool:
         True if setup successful, False otherwise
     """
     try:
-        print("\n🎬 Setting up movie database...")
+        print("\nSetting up movie database...")
         
         # Initialize indexer
         indexer = MovieDataIndexer()
@@ -58,32 +58,32 @@ def setup_movie_database() -> bool:
         if indexer.es_client.index_exists():
             stats = indexer.get_index_stats()
             if stats.get('document_count', 0) > 0:
-                print(f"✅ Movie database already exists with {stats['document_count']} movies")
+                print(f"Movie database already exists with {stats['document_count']} movies")
                 return True
         
         # Create sample data and index it
-        print("📊 Creating sample movie data...")
+        print("Creating sample movie data...")
         movies = indexer.create_sample_movies()
         
-        print("💾 Saving data to file...")
+        print("Saving data to file...")
         indexer.save_sample_data(movies)
         
-        print("📤 Indexing movies into Elasticsearch...")
+        print("Indexing movies into Elasticsearch...")
         success = indexer.index_movies(movies)
         
         if success:
             # Show final statistics
             stats = indexer.get_index_stats()
-            print(f"\n📈 Database Setup Complete!")
+            print("\nDatabase Setup Complete!")
             print(f"   - Movies indexed: {stats.get('document_count', 0)}")
             print(f"   - Index size: {stats.get('index_size_mb', 0)} MB")
             return True
         else:
-            print("❌ Failed to index movie data")
+            print("Failed to index movie data")
             return False
             
     except Exception as e:
-        print(f"❌ Database setup failed: {e}")
+        print(f"Database setup failed: {e}")
         return False
 
 
@@ -117,14 +117,14 @@ def run_quick_demo() -> None:
             
             if results.get('results'):
                 for movie in results['results']:
-                    print(f"   • {movie['title']} ({movie['release_year']}) - ⭐{movie['rating']}")
+                    print(f"   • {movie['title']} ({movie['release_year']}) - Rating: {movie['rating']}")
             else:
                 print("   No results found")
             
             time.sleep(1)  # Small delay for readability
         
         # Show statistics
-        print(f"\n📊 Database Statistics:")
+        print("\nDatabase Statistics:")
         print("-" * 40)
         stats = engine.get_movie_statistics()
         
@@ -133,61 +133,61 @@ def run_quick_demo() -> None:
             print(f"   • Average rating: {stats.get('avg_rating', 0)}")
             print(f"   • Top genres: {', '.join([g['genre'] for g in stats.get('genres', [])[:3]])}")
         
-        print("\n✨ Demo complete! Ready for interactive search.")
+        print("\nDemo complete! Ready for interactive search.")
         
     except Exception as e:
-        print(f"❌ Demo failed: {e}")
+        print(f"Demo failed: {e}")
 
 
 def main():
     """
     Main function to orchestrate the movie search engine setup and execution.
     """
-    print("🎬 ELASTICSEARCH MOVIE SEARCH ENGINE")
+    print("ELASTICSEARCH MOVIE SEARCH ENGINE")
     print("=" * 50)
     print("A comprehensive movie search and analytics system")
     print("featuring full-text search, filtering, and aggregations.")
     print("=" * 50)
     
     # Step 1: Check Elasticsearch connection
-    print("\n🔌 Step 1: Checking Elasticsearch connection...")
+    print("\nStep 1: Checking Elasticsearch connection...")
     if not check_elasticsearch_connection():
-        print("\n❌ Setup failed. Please start Elasticsearch and try again.")
+        print("\nSetup failed. Please start Elasticsearch and try again.")
         sys.exit(1)
     
     # Step 2: Setup movie database
-    print("\n📚 Step 2: Setting up movie database...")
+    print("\nStep 2: Setting up movie database...")
     if not setup_movie_database():
-        print("\n❌ Database setup failed. Please check the logs and try again.")
+        print("\nDatabase setup failed. Please check the logs and try again.")
         sys.exit(1)
     
     # Step 3: Run quick demo
-    print("\n🎯 Step 3: Running quick demonstration...")
+    print("\nStep 3: Running quick demonstration...")
     run_quick_demo()
     
     # Step 4: Ask user what to do next
-    print("\n🎮 What would you like to do next?")
-    print("1. 🖥️  Start Interactive Search Interface")
-    print("2. 📖 View Project Documentation")
-    print("3. 🧪 Run Custom Search Tests")
-    print("4. ❌ Exit")
+    print("\nWhat would you like to do next?")
+    print("1. Start Interactive Search Interface")
+    print("2. View Project Documentation")
+    print("3. Run Custom Search Tests")
+    print("4. Exit")
     
     try:
         choice = input("\nEnter your choice (1-4): ").strip()
         
         if choice == "1":
-            print("\n🖥️ Starting Interactive Search Interface...")
+            print("\nStarting Interactive Search Interface...")
             interface = MovieSearchInterface()
             interface.run()
         
         elif choice == "2":
-            print("\n📖 Project Documentation:")
+            print("\nProject Documentation:")
             print("=" * 40)
-            print("🔗 README.md - Complete project documentation")
-            print("🔗 src/movie_search_engine.py - Core search functionality")
-            print("🔗 src/search_interface.py - Interactive interface")
-            print("🔗 data/movies.json - Sample movie dataset")
-            print("\n💡 Use the interactive interface (option 1) to explore all features!")
+            print("README.md - Complete project documentation")
+            print("src/movie_search_engine.py - Core search functionality")
+            print("src/search_interface.py - Interactive interface")
+            print("data/movies.json - Sample movie dataset")
+            print("\nUse the interactive interface (option 1) to explore all features!")
         
         elif choice == "3":
             print("\n🧪 Running Custom Search Tests...")
@@ -211,15 +211,15 @@ def main():
                     print("   No results found")
         
         elif choice == "4":
-            print("\n👋 Thank you for using the Movie Search Engine!")
+            print("\nThank you for using the Movie Search Engine!")
         
         else:
-            print("\n❌ Invalid choice. Exiting...")
+            print("\nInvalid choice. Exiting...")
     
     except KeyboardInterrupt:
-        print("\n\n👋 Goodbye!")
+        print("\n\nGoodbye!")
     except Exception as e:
-        print(f"\n❌ An error occurred: {e}")
+        print(f"\nAn error occurred: {e}")
 
 
 if __name__ == "__main__":
