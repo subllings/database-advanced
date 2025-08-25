@@ -1,0 +1,104 @@
+{
+  "movies": [
+    {
+      "title": "The Matrix",
+      "year": 1999,
+      "rating": 8.7,
+      "duration": 136,
+      "plot": "A computer programmer discovers that reality as he knows it might not be real.",
+      "poster_url": "https://example.com/matrix.jpg"
+    },
+    {
+      "title": "The Matrix Reloaded",
+      "year": 2003,
+      "rating": 7.2,
+      "duration": 138,
+      "plot": "Neo and his allies race against time before the machines discover the city of Zion.",
+      "poster_url": "https://example.com/matrix_reloaded.jpg"
+    },
+    {
+      "title": "John Wick",
+      "year": 2014,
+      "rating": 7.4,
+      "duration": 101,
+      "plot": "An ex-hit-man comes out of retirement to track down the gangsters that took everything from him.",
+      "poster_url": "https://example.com/john_wick.jpg"
+    },
+    {
+      "title": "The Godfather",
+      "year": 1972,
+      "rating": 9.2,
+      "duration": 175,
+      "plot": "An organized crime dynasty's aging patriarch transfers control of his clandestine empire to his reluctant son.",
+      "poster_url": "https://example.com/godfather.jpg"
+    },
+    {
+      "title": "Pulp Fiction",
+      "year": 1994,
+      "rating": 8.9,
+      "duration": 154,
+      "plot": "The lives of two mob hitmen, a boxer, a gangster and his wife intertwine in four tales of violence and redemption.",
+      "poster_url": "https://example.com/pulp_fiction.jpg"
+    }
+  ],
+  "people": [
+    {
+      "name": "Keanu Reeves",
+      "birth_year": 1964,
+      "nationality": "Canadian"
+    },
+    {
+      "name": "Laurence Fishburne",
+      "birth_year": 1961,
+      "nationality": "American"
+    },
+    {
+      "name": "Lana Wachowski",
+      "birth_year": 1965,
+      "nationality": "American"
+    },
+    {
+      "name": "Lilly Wachowski",
+      "birth_year": 1967,
+      "nationality": "American"
+    },
+    {
+      "name": "Marlon Brando",
+      "birth_year": 1924,
+      "nationality": "American"
+    },
+    {
+      "name": "Al Pacino",
+      "birth_year": 1940,
+      "nationality": "American"
+    },
+    {
+      "name": "Francis Ford Coppola",
+      "birth_year": 1939,
+      "nationality": "American"
+    },
+    {
+      "name": "Quentin Tarantino",
+      "birth_year": 1963,
+      "nationality": "American"
+    },
+    {
+      "name": "John Travolta",
+      "birth_year": 1954,
+      "nationality": "American"
+    },
+    {
+      "name": "Samuel L. Jackson",
+      "birth_year": 1948,
+      "nationality": "American"
+    }
+  ],
+  "genres": [
+    {"name": "Action"},
+    {"name": "Sci-Fi"},
+    {"name": "Thriller"},
+    {"name": "Drama"},
+    {"name": "Crime"},
+    {"name": "Comedy"}
+  ]
+}

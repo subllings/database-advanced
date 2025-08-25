@@ -77,7 +77,10 @@ mongodb_library_catalog/.venv/
 mongodb_library_catalog/logs/
 mongodb_library_catalog/library_catalog.log
 
-# Neo4j data (for future project)
-neo4j_*/data/
-neo4j_*/logs/
-neo4j_*/.venv/
+# Neo4j data
+neo4j_movie_graph/.venv/
+neo4j_movie_graph/logs/
+neo4j_movie_graph/movie_graph.log
+neo4j_movie_graph/data/neo4j/
+neo4j_movie_graph/data/import/
+neo4j_movie_graph/data/plugins/
