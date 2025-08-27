@@ -1,16 +1,21 @@
 #!/bin/bash
 
+# Navigate to project directory first: cd /e/_SoftEng/_BeCode/database-advanced/neo4j_movie_graph
+# Make this file executable: chmod +x scripts/setup-env.sh
+# Run it with: ./scripts/setup-env.sh
+# chmod +x scripts/setup-env.sh && ./scripts/setup-env.sh
+
 echo "Setting up Neo4j Movie Graph environment..."
 
 # Check if Python is installed
 if ! command -v python &> /dev/null; then
-    echo "Error: Python is not installed. Please install Python 3.8 or higher."
+    echo "Error: Python is not installed. Please install Python 3.12.10 or higher."
     exit 1
 fi
 
 # Check Python version
 python_version=$(python --version 2>&1 | awk '{print $2}')
-echo "Using Python version: $python_version"
+echo "Using Python version: 3.12.10"
 
 # Create virtual environment if it doesn't exist
 if [ ! -d ".venv" ]; then

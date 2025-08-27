@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Navigate to project directory first: cd /e/_SoftEng/_BeCode/database-advanced/neo4j_movie_graph
+# Make this file executable: chmod +x start-neo4j.sh
+# Run it with: ./scripts/start-neo4j.sh
+# chmod +x scripts/start-neo4j.sh && ./scripts/start-neo4j.sh
+
 echo "Starting Neo4j Movie Graph..."
 
 # Check if Docker is running

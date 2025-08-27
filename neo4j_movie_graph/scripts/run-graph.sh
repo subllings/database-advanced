@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Navigate to project directory first: cd /e/_SoftEng/_BeCode/database-advanced/neo4j_movie_graph
+# Make this file executable: chmod +x run-graph.sh
+# Run it with: ./scripts/run-graph.sh
+# chmod +x scripts/run-graph.sh && ./scripts/run-graph.sh
+
 echo "Running Neo4j Movie Graph..."
 
 # Activate virtual environment

@@ -47,7 +47,7 @@ fi
 
 # === Create new venv ===
 print_blue "Creating new virtual environment with Python 3.12.10..."
-py -3.12 -m venv .venv || print_error "Python 3.12 not found. Please install it first."
+py -3.12 -m venv .venv || print_error "Python 3.12.10 not found. Please install it first."
 
 # === Activate venv ===
 echo ">>> Activating virtual environment..."

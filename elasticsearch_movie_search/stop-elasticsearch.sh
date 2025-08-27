@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Navigate to project directory first: cd /e/_SoftEng/_BeCode/database-advanced/elasticsearch_movie_search
+# Make this file executable: chmod +x stop-elasticsearch.sh
+# Run it with: ./stop-elasticsearch.sh
+# chmod +x stop-elasticsearch.sh && ./stop-elasticsearch.sh
+
 # 🛑 Stop Elasticsearch Script
 # This script stops the Elasticsearch containers
 

@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Navigate to project directory first: cd /e/_SoftEng/_BeCode/database-advanced/mongodb_library_catalog
+# Make this file executable: chmod +x scripts/start-mongodb.sh
+# Run it with: ./scripts/start-mongodb.sh
+# chmod +x scripts/start-mongodb.sh && ./scripts/start-mongodb.sh
+
 echo "Starting MongoDB Library Catalog..."
 
 # Check if Docker is running

@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Navigate to project directory first: cd /e/_SoftEng/_BeCode/database-advanced/mongodb_library_catalog
+# Make this file executable: chmod +x scripts/stop-mongodb.sh
+# Run it with: ./scripts/stop-mongodb.sh
+# chmod +x scripts/stop-mongodb.sh && ./scripts/stop-mongodb.sh
+
 echo "Stopping MongoDB Library Catalog..."
 
 # Check if docker-compose is available

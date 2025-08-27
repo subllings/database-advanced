@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Navigate to project directory first: cd /e/_SoftEng/_BeCode/database-advanced/mongodb_library_catalog
+# Make this file executable: chmod +x scripts/run-catalog.sh
+# Run it with: ./scripts/run-catalog.sh
+# chmod +x scripts/run-catalog.sh && ./scripts/run-catalog.sh
+
 echo "Running MongoDB Library Catalog..."
 
 # Activate virtual environment
